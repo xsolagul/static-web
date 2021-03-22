@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$2 
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+     sub_filter '<head>' '<head> <base href="/student36/static/">';
+  name: static-dev-web
+  namespace: student36-static-dev
+spec:
+  rules:
+  - host: dev.opsta.net
+    http:
+      paths:
+      - path: /student36/static(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: static-dev-web
+            port:
+              number: 80

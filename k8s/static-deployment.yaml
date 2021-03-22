@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: static-dev-web
+  namespace: student36-static-dev
+  labels:
+    app: static-dev-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: static-dev-web
+  template:
+    metadata:
+      labels:
+        app: static-dev-web
+    spec:
+      containers:
+      - name: static-dev-web
+        image: ghcr.io/xsolagul/static-web:dev
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: web-port
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+            scheme: HTTP
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+            scheme: HTTP
+      imagePullSecrets:
+      - name: registry-github
